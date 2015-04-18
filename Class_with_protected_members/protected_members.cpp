@@ -1,0 +1,85 @@
+/*
+Basics on classes:
+En este ejemplo cuando derivamos de una superclase y queremos acceder a algunos de los datos 
+privados de ella no podemos. Una manera de solucionarlo es cambiando la restriccion de 
+private a protected.
+*/
+
+#include<iostream>
+#include<sstream>
+
+using namespace std;
+
+class Employee
+{
+  //private:
+protected:
+  string name;
+  double pay;
+public:
+  Employee()
+  {
+    name = " ";
+    pay = 0;
+  }
+  Employee(string empName, double payRate)
+  {
+    name = empName;
+    pay = payRate;
+    
+  }
+  // Geters
+  string getName(){return name;}
+
+  double getPay(){return pay;}
+
+  //Seters
+  void setName(string empName){name = empName;}
+
+  void setPay(double payRate){pay = payRate;}
+
+  // Show object method
+  string toString()
+  {
+    stringstream stm;
+    stm << name << ": " << pay;
+    return stm.str();
+  }
+  double grossPay(int hours){return pay * hours;}
+};
+
+
+// Derived class
+class Manager : public Employee
+{
+private:
+  bool salaried;
+
+public:
+  Manager(string empName, double payRate, bool isSalaried)
+    : Employee(empName, payRate)
+  {
+    salaried = isSalaried;
+  }
+  //Geter for salary
+  bool getSalaried(){return salaried;}
+
+  double grossPay(int hours){return pay * hours;}
+};
+
+int main()
+{
+  // Created a employes
+  Employee emp1("Martin Noblia", 3700);
+  
+  Manager emp2("elsuizo", 7300, true);
+  
+  // Show 
+  cout << emp1.toString() << endl;
+  cout << emp2.toString() << endl;
+  cout << "Employee 2 is salaried?: "<< emp2.getSalaried() << endl;
+  cout << "Employee gross pay: " << emp1.grossPay(12) << endl;
+  cout << "Employee gross pay: " << emp2.grossPay(12) << endl;
+  return 0;
+  
+}

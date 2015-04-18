@@ -1,0 +1,35 @@
+/*
+Basics on classes
+*/
+
+#include<iostream>
+
+using namespace std;
+
+class Employee
+{
+private:
+  string name;
+  double pay;
+public:
+  Employee()
+  {
+    name = " ";
+    pay = 0;
+  }
+  Employee(string empName, double payRate)
+  {
+    name = empName;
+    pay = payRate;
+    
+  }
+  // Geters
+  string getName(){return name;}
+
+  double getPay(){return pay;}
+
+  //Seters
+  void setName(string empName){name = empName;}
+
+  void setPay(double payRate){pay = payRate;}
+}
