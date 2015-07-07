@@ -846,4 +846,122 @@ Por ejemplo podemos escribir una función que calcule la suma de todos los eleme
 de cualquier *container* :
 
 ```cpp
+template<typename Container, typename Value>
+Value sum(const Container& c, Value v)
+{
+    for (auto x : c)
+    v+=x;
+    return v;
+}
 ```
+Por ello cada vez que utilicemos la función `sum()` no necesitaremos explicitar 
+los *types* ya que lo hace automaticamente el compilador. Un ejemplo de uso sería:
+
+```cpp
+ void user(Vector<int>& vi, std::list<double>& ld, std::vector<complex<double>>& vc)
+{
+    int x = sum(vi,0);
+    // the sum of a vector of ints (add ints)
+    double d = sum(vi,0.0);
+    // the sum of a vector of ints (add doubles)
+    double dd = sum(ld,0.0);
+    // the sum of a list of doubles
+    auto z = sum(vc,complex<double>{}); // the sum of a vector of complex<double>
+    // the initial value is {0.0,0.0}
+}
+```
+## Programación generica
+
+Cuales son los beneficios de utilizar Templates???
+
+    * La posibilidad de pasar *types* como argumentos, sim perder información
+    * Retrasar el chequeo de *types*. Esto implica la posibilidad de mezclar información de diferentes contextos
+    * La posibilidad de pasar valores constante como argumentos. Esto da la posibilidad de hacer calculos en tiempo
+    de compilación. 
+
+## Function Objects
+
+Un template particularmente útil es el *function object* (llamado también *functor*)
+el cual es usado para definir objetos que pueden ser llamados como funciones. Por ejemplo:
+
+```cpp
+template<typename T>
+class Less_than {
+    const T val; // value to compare against
+    public:
+    Less_than(const T& v) :val(v) { }
+    bool operator()(const T& x) const { return x<val; } // call operator
+};
+
+```
+Esta función llamada `operator()` implementa la llamada a la "función" del operador `()`
+Podemos definir variables de nombres de *type* `Less_than` para algún argumento(de algún *type*)
+
+```cpp
+Less_than<int> lti {42}; // lti(i) will compare i to 42 using < (i<42)
+Less_than<string> lts {"Backus"}; // lts(s) will compare s to "Backus" using < (s<"Backus")
+
+```
+Y podríamos llamar a estos *functors* como:
+
+```cpp
+void fct(int n, const string & s)
+{
+    bool b1 = lti(n); // tr ue if n<42
+    bool b2 = lts(s); // tr ue if s<"Backus"
+    // ...
+}
+
+```
+Asi estos *functors* son ampliamente utilizados como argumento de *algorithms*. 
+Por ejemplo podemos contar las ocurrencias de un valor para el cual un predicado 
+retorna `true` :
+
+```cpp
+template<typename C, typename P>
+int count(const C& c, P pred)
+{
+    int cnt = 0;
+    for (const auto& x : c)
+    if (pred(x))
+    ++cnt;
+    return cnt;
+}
+
+```
+Y un predicado lo podemos modelar como algo que invocamos y retorna `true` o `false`
+
+```cpp
+void f(const Vector<int>& vec, const list<string>& lst, int x, const string& s)
+{
+    cout << "number of values less than " << x
+    << ": " << count(vec,Less_than<int>{x})
+    << '\n';
+    cout << "number of values less than " << s
+    << ": " << count(lst,Less_than<string>{s})
+    << '\n';
+}
+
+```
+El único inconveniente es que debemos definir separadamente a `Less_than`, pero 
+por suerte existe una manera de hacerlo *inline* :
+
+```cpp
+void f(const Vector<int>& vec, const list<string>& lst, int x, const string& s)
+{
+    cout << "number of values less than " << x
+    << ": " << count(vec,[&](int a){ return a<x; })
+    << '\n';
+    cout << "number of values less than " << s
+    << ": " << count(lst,[&](const string& a){ return a<s; })
+    << '\n';
+}
+
+```
+La notación `[&](int a){return a<x;}` es llamada *lambda expression* y genera un 
+objeto exactamente igual a `Less_than<int>{}`. El `[&]` se llama *capture list*
+especificando que las variables locales van a ser accedidas por refencias, también como 
+solo queríamos `x` podríamos haber escrito `[&x]`, si hubieramos querido una copia de `x`
+podríamos haber escrito `[=x]`, capturar nada es `[]`, capturar todos los nombres `[]` y 
+capturar todos los nombres capturados por valor `[=]`. 
+
