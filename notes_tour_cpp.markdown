@@ -896,6 +896,7 @@ class Less_than {
 ```
 Esta función llamada `operator()` implementa la llamada a la "función" del operador `()`
 Podemos definir variables de nombres de *type* `Less_than` para algún argumento(de algún *type*)
+Los *functors* son utilizados para especificar el significado de las operaciones fundamentales de un algoritmo general.
 
 ```cpp
 Less_than<int> lti {42}; // lti(i) will compare i to 42 using < (i<42)
