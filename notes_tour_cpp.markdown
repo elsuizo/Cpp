@@ -966,3 +966,29 @@ solo queríamos `x` podríamos haber escrito `[&x]`, si hubieramos querido una c
 podríamos haber escrito `[=x]`, capturar nada es `[]`, capturar todos los nombres `[]` y 
 capturar todos los nombres capturados por valor `[=]`. 
 
+#Strings
+
+El *standard* de C++ posee un type para el manejo de *strings* `string` el cual preserva la mayoría de las caracteristicas de C
+además posee el manejo de expresiones regulares *regular expression* que nos ayuda a encontrar patrones en textos. El *type* `string` provee una amplia variedad de operaciones con *strings*, como ser la concatenación. Por ejemplo:
+
+```cpp
+string compose(const string& name, const string& domain)
+{
+    return name + '@' + domain;
+}
+auto addr = compose("dmr","bell−labs.com");
+```
+En muchas aplicaciones se quiere agregar un string al final de otro, esto se puede hacer con el operador `+=`, por ejemplo:
+
+```cpp
+void m2(string& s1, string& s2)
+{
+    s1 = s1 + '\n'; // append newline
+    s2 += '\n'; // append newline
+}
+
+```
+
+#Containers
+
+
