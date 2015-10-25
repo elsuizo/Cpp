@@ -991,4 +991,116 @@ void m2(string& s1, string& s2)
 
 #Containers
 
+Una clase que tiene como objetivo principal guardar otros objetos, se llama 
+`container`.
+
+##Vector
+
+El más útil `container` de la librería `standard` es el `Vector`. Como vimos un
+`Vector` es una secuencia de elementos de el mismo *type*, los elementos son 
+guardardados en espacios de memoria contigua. Podemos inicializar un `Vector` 
+con un conjunto de valores que sean de su *type*: 
+
+```cpp
+vector<Entry> phone_book = {
+{"Martin Noblia", 1168883307},
+{"Paul Erdos", 11373737},
+{"Leonhard Euler", 11314314314}
+}; 
+```
+Podemos acceder a los elementos mediante *subscripting* 
+
+```cpp
+void print_book(const vector<Entry>& book)
+{
+    for(int i = 0; i != book.size(); ++i)
+    {
+        cout << book[i] << '\n';
+    }
+}
+```
+Podemos usar un *range-for-loop*
+
+
+```Cpp
+void print_book(const vector<Entry>& book)
+{
+    for(const auto& x: book)
+    {
+        cout << x << '\n';
+    }
+}
+```
+Cuando definimos un `Vector` podemos declarar el número de elementos que queremos
+ que tengan:
+
+ ```Cpp
+vector<int> v1 = {1, 2, 3, 4}; // the size is 4
+vector<string> v2; // the size is 0
+vector<Shape∗> v3(23);// the size is 23
+vector<double> v4(32,9.9); // the size is 32 and the initial element value is 9.9
+```
+##List
+
+La librería *standard* ofrece listas doblemente enlazadas llamadas `list`. Usamos
+listas para secuencias en las que necesitamos insertar o borrar elementos sin mover 
+los otros elementos. Por ejemplo insertar o borrar numeros de telefono puede ser 
+una aplicación válida:
+
+```Cpp
+list<Entry> phone_book = {
+{"Martin Noblia", 1168883307},
+{"Paul Erdos", 11373737},
+{"Leonhard Euler", 11314314314}
+}
+```
+Para consultar un elemento de la `list` se utilizan bucles `for` en vez de acceder 
+a los elemento individuales usando *subscripting*
+
+```Cpp
+int get_number(const string& s)
+{
+    for(const auto& x : phone_book)
+        if(x.name == s)
+            return x.number ;
+    return 0 ;         
+}
+```
+Podemos hacer lo mismo usando *iterators*:
+
+```Cpp
+int get_number(const string& s)
+{
+    for(auto p = phone_book.begin(); p!=phone_book.end(); ++p)
+        if(p->name==s)
+            return p->number;
+
+    return 0; // use '0' to represent "number not found"         
+}
+```
+Dado un *iterator* `p` , `*p` es el elemento al cual apunta, `++p` avanza `p` a 
+referirse al elemento proximo, y cuando `p` apunta a una clase con un miembro `m`
+, entonces `p->m` es equivalente a `(*p).m`. 
+
+Agregar o eliminar elementos a una lista es fácil:
+
+```Cpp
+void f(const Entry& ee, list<Entry>::iterator p, list<Entry>::iterator q)
+{
+    phone_book.insert(p, ee); // add ee before the element refered to by p
+    phone_book.erase(q); // remove the element refered to by q
+}
+```
+
+Esto lo que hace es en `insert(p, elem)` insertar un elemento con una copia del valor 
+`elem` despues del elemento apuntado por `p`. Similarmente `erase(p)` remueve el 
+elemento apuntado por `p` y lo destruye. 
+
+##Map
+
+Los mapas son arrays asociativos o diccionarios
+
+
+#Algorithms
+
 
