@@ -1103,4 +1103,30 @@ Los mapas son arrays asociativos o diccionarios
 
 #Algorithms
 
+Una estructura de datos como una lista o un vector no son útiles por si solas, 
+necesitamos poder realizar operaciones básicas sobre ellos, como agregar y remover elementos.
+Consecuentemente, la librería *standard* provee de los algoritmos más comunes para *Containers*
+Por ejemplo podemos simple y eficientemente ordenar un vector de `Entry` y hacer una copia de 
+los elementos únicos en una lista.
+
+```Cpp
+void f(vector<Entry>& vec, list<Entry>& lst)
+{
+    sort(vec.begin(), vec.end()); // use < for order
+    unique_copy(vec.begin(), vec.end(), lst.begin()); // dont copy adjacents equal elements
+}
+```
+Para este trabajo podríamos haber redefinido el operador `<` para que acepte `Entry`s:
+
+```Cpp
+bool operator <(const Entry& x, const Entry& y)
+{
+    return x.name < y.name; // order Entrys by their names
+}
+```
+Los algoritmos *standards* se expresan en términos de secuencias de elementos como
+conjuntos semiabiertos. Las secuencias se representan por un par de *iterators* que especifican 
+el primer y el posterior al último elemento.
+![Sin titulo](home/elsuizo/iterators.png)
+
 
