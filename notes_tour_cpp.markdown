@@ -1130,4 +1130,123 @@ el primer y el posterior al último elemento.
 
 ![Sin titulo](Images/iterators.png)
 
+En el ejemplo `sort()` ordena la secuencia definida por el par de *iterators* `vec.begin()` - `vec.end()`
+Para escribir(salida) lo único que se debe hacer es especificar el primer elemento a ser escrito. Si son más
+de uno los elementos a ser escritos, los elementos siguientes al primero serán sobreescritos. Asi para evitar
+errores `lst` debe tener al menos la cantidad de elementos únicos que hay en `vec`. Si en cambio queremos
+poner esos elementos en un *Container* nuevo podemos escribir:
+
+```Cpp
+list<Entry> f(vector<Entry>& vec)
+{
+    list<Entry> res; //output
+    sort(vec.begin(), vec.end());
+    unique_copy(vec.begin(), vec.end(), back_inserter(res)); // append to res
+    return res;
+}
+```
+##Uso de Iteradores
+
+Muchos *Algorithms* devuelven *iterators*, por ejemplo `find()` busca un valor en una 
+secuencia y devuelve un *iterator* al elemento encontrado:
+
+```Cpp
+bool has_c(const string& s, char c) // does s contain c?¿?
+{
+    auto p = find(s.begin(), s.end(), c);
+    if(p != s.end())
+        return true;
+    else
+        return false;
+}
+```
+Como muchos algoritmos de la librería *standard* `find()` devuelve `end()` para indicar 
+"no encontrado", una definición equivalente para `has_c()` puede ser:
+
+```Cpp
+bool has_c(const string& s, char c) // does s contain c?¿?
+{
+    return find(s.begin(), s.end(), c) != s.end();
+}
+```
+Un ejercicio más interesante podría ser encontrar donde ocurren las coincidencias de un 
+`char` en un `string`. Podemos devolver un conjunto de ocurrencias como `vector` de `string` *iterators*
+y si asumimos que queremos modificar los lugares de ocurrencias, podemos pasar un `string` no `const`
+
+```Cpp
+vector<string::iterator> find_all(string& s, char c) // find all occurrences of c in s
+{
+    vector<string::iterator> res;
+    for(auto p = s.begin(); p != s.end(); ++p)
+        if(*p == c)
+            res.push_back(p);
+    return res;         
+}
+```
+Iteramos sobre los elementos del `string` usando un loop convencional, moviendo el *iterator* `p`
+un elemento a la vez usando `++` y buscamos los elementos usando el operador de dereferencia `*p`.
+Podríamos testear `find_all()` asi:
+
+```Cpp
+void test()
+{
+    string m {"Mary had little lamb"};
+    for(auto p: find_all(m, 'a'))
+        if(*p != 'a')
+            cerr << "a bug¡\n";
+}
+```
+Podemos generalizar `find_all()` utilizando *templates*:
+
+```Cpp
+template<typename C, typename V>
+vector<typename C::iterator> find_all(C& c,V v)
+{
+    vector<typename C::iterator> res;
+    for(auto p = c.begin(); p != c.end(); ++p)
+        if(*p == v)
+            res.push_back(p);
+    return res;
+}
+```
+El `typename` es necesario para informar al compilador que el *iterator* `C` 
+se supone que es un *type* y no un valor de cierto *type*(por ejemplo el `int` 7)
+Podemos también ocultar los detalles de la implementación introduciendo un alias al *type*
+*iterator*
+
+```Cpp
+template <typename T>
+using Iterator = typename T::iterator;  // T's iterator
+
+template <typename C, typename V>
+vector<Iterator<C>> find_all(C& c, V v)
+{
+    vector<Iterator<C>> res;
+    for(auto p = c.begin(); p != c.end(); ++p)
+        if(*p == v)
+            res.push_back(p);
+    return res;         
+}
+```
+y Ahora podemos escribir nuestra función `test()` mejorada:
+
+```Cpp
+void test()
+{
+    string m {"Mary had a little lamb"};
+
+    for(auto p: find_all(m, 'a'))
+        if(*p != 'a')
+            cerr << "string bug\n";
+
+    list double ld {1.1, 1.2, 1.3, 3.7, 7.3, 1.1};
+    for(auto p: find_all(ld, 1.1))
+        if(p != 1.1)
+            cerr "list bug¡\n";
+
+
+}
+```
+## Iterator types
+
 
