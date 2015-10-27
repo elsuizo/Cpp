@@ -1127,6 +1127,7 @@ bool operator <(const Entry& x, const Entry& y)
 Los algoritmos *standards* se expresan en términos de secuencias de elementos como
 conjuntos semiabiertos. Las secuencias se representan por un par de *iterators* que especifican 
 el primer y el posterior al último elemento.
-![Sin titulo](home/elsuizo/iterators.png)
+
+![Sin titulo](Images/iterators.png)
 
 
