@@ -1255,7 +1255,7 @@ Por ejemplo un *iterator* para el *type* `vector` puede ser un simple *pointer* 
 referenciar a cada elemento de el sin problemas. Alternativamente un *iterator* para `vector` se 
 puede implementar con un *pointer* más un indice:
 
-![Sin titulo](Images/iterators_vec.png)
+![Sin titulo](Images/iterator_vec.png)
 
 En cambio un *iterator* para una *list* es más complicado, ya que un elemento de una *list* en general 
 no se sabe donde esta ubicado el próximo elemento de ella. Asi un *iterator* para una *list* debe ser un 
