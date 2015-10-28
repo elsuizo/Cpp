@@ -1249,4 +1249,38 @@ void test()
 ```
 ## Iterator types
 
+Que son los *iterators* realmente?. Cualquier *iterator* es un objeto de algún *type*
+ya que llevan la información del los *types* a los que pertenecen(para poder hacer bien su trabajo)
+Por ejemplo un *iterator* para el *type* `vector` puede ser un simple *pointer* ya que se puede 
+referenciar a cada elemento de el sin problemas. Alternativamente un *iterator* para `vector` se 
+puede implementar con un *pointer* más un indice:
+
+![Sin titulo](Images/iterators_vec.png)
+
+En cambio un *iterator* para una *list* es más complicado, ya que un elemento de una *list* en general 
+no se sabe donde esta ubicado el próximo elemento de ella. Asi un *iterator* para una *list* debe ser un 
+*pointer* a un *link*:
+
+
+![Sin titulo](Images/iterator_list.png)
+
+## Stream Iterators
+
+Los *iterators* no solo aparecen en *Containers*, también estan presentes en operaciones de entrada-salida de 
+datos. Para hacer un `ostream_iterator` necesitamos especificar con que *types* se va a trabajar. Por ejemplo:
+
+```Cpp
+ostream_iterator<string> oo {cout}; // write strings to cout
+```
+El efecto de asignar a `*oo` es el de escribir el valor en `cout`. Por ejemplo:
+
+```Cpp
+int main()
+{
+    *oo = "Hello"; // meaning cout << "Hello"
+    ++oo; 
+    *oo = "World!\n"; // meaning cout << "World!\n";
+    return 0;
+}
+```
 
