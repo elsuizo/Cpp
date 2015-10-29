@@ -1283,4 +1283,90 @@ int main()
     return 0;
 }
 ```
+Similarmente `istream_iterator<string>` es algo que nos permite trabajar con entradas de datos
+para solo lectura. Nuevamente podemos especificar el *Stream* a ser usado y los *types* que son
+esperados. `istream_iterator<string> ii {cin};`
+
+Input *Iterators* son usados en pares para representar secuencias, ya que podemos proveer un 
+`istream_iterator` para indicar el final del *input*. Esto es el comportamiento por *default* de `istream_iterator`
+`istream_iterator<string> eos {}`
+
+Tipicamente estos *iterators* no son usados directamente, sino que sirven como entrada para los algoritmos. Por
+ejemplo podemos escribir un programa que lea un archivo, ordene las palabras, elimine los duplicados, y escriba el 
+resultado en otro archivo.
+
+```Cpp
+int main()
+{
+    string from, to;
+    cin >> from >> to; // get the sources and target file names
+    ifstream is {from}; // input stream file "from"
+    istream_iterator<string> ii {is}; // input iterator from stream
+    istream_iterator<string> eos {}; // input sentinel
+
+    ofstream os {to}; // output stream for file "to"
+    ostream_iterator<string> oo {os,"\n"}; // output iterator for stream
+    vector<string> b {ii, eos}; // b is a vector initialized from input
+    sort(b.begin(), b.end()); // sort the buffer
+
+    unique_copy(b.begin(), b.end()); // copy the buffer to output, discard replicates values
+
+    return !is.eof() || !os; // return error state
+    
+}
+```
+Donde `ifistream` es un `istream` que puede ser añadido a un archivo, y `ofstream` is un `ostream` que puede ser 
+añadido también a un archivo. El `ostream_iterator`s como segundo argumento es usado para delimitar los valores
+de salida. Se puede hacer el programa anterior más elegantemente utilizando conjuntos `set` en lugar de `vector`
+y asi directamente no guardar los elementos repetidos.
+
+```Cpp
+int main()
+{
+    string from, to;
+    cin >> from >> to;
+    ifstream is {from};
+    ofstream os {to};
+
+    set<string> b {istream_iterator<string> {is}, istream_iterator<string> {}}; // read input
+    copy(b.begin(), b.end(), ostream_iterator<string> {os, "\n"}) // copy to output
+    
+    return !is.eof() || !os ; // return error state
+}
+```
+##Predicates
+
+En los ejemplos anteriores los algoritmos simplemente hacen lo que le pedimos y no pueden 
+ser utilizados para hacer tareas parecidas(sin volver a tipear todo el código). Lo que 
+queremos es poder agregar a los requerimientos de búsqueda un parámetro asi tenemos un 
+conjunto de algoritmos. El algoritmo de `find` provee una manera conveniente de buscar un 
+elemento especifico, una variante más general sería un elemento que cumpla con un requerimiento 
+específico, o sea un predicado. Por ejemplo podríamos querer buscar un `map` para el primer
+valor mayor que 42. Un `map` nos permite acceder a sus elementos como una secuencia de (*key*, *value*)
+pares, entonces podemos buscar una secuencia  `map<string, int>` para `pair<const string, int>` 
+donde `int` sea mayor que 42.
+
+```Cpp
+void f(map<string, int>& m)
+{
+    auto p = find_if(m.begin(), m.end(), Greater_than{42});
+
+}
+```
+Aqui `Greater_than{42}` es un *functor* que almacena el número 42(como vimos anteriormente)
+
+
+# Numerics
+## Mathematical functions
+
+En `<cmath>` encontramos las funciones matemáticas *standar* como `sqrt()`, `log()`
+... para argumentos `float`, `double`, `long double`. Las versiones de `complex` estan en 
+`<complex>`.
+
+## Numerical Algorithms
+
+En `<numeric>` encontramos un conjunto de algoritmos numericos generalizados, como `accumulate()`
+
+# Concurrency
+
 
